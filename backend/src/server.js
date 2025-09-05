@@ -39,7 +39,7 @@ app.use(cors({
 app.use(express.json());
 
 // MongoDB Atlas Connection
-const mongoUri = process.env.MONGODB_URI || "mongodb+srv://pgoevenscheduler_db_user:taskmanager@cluster0t.wm3lhps.mongodb.net/taskmanager";
+const mongoUri = process.env.MONGODB_URI || "mongodb+srv://pgoevenscheduler_db_user:taskmanager@cluster0t.wm3lhps.mongodb.net/taskmanager?retryWrites=true&w=majority&appName=Cluster0t";
 
 // Connect to MongoDB and wait for connection
 const connectDB = async () => {
