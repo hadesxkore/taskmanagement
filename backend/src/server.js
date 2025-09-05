@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
-const jwt = require('jsonwebtoken');
 
 // Load environment variables
 dotenv.config();
@@ -12,24 +11,18 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:5177', 'http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://localhost:5176'],
+  origin: [
+    'http://localhost:5177', 
+    'http://localhost:5173', 
+    'http://localhost:5174', 
+    'http://localhost:5175', 
+    'http://localhost:5176',
+    'https://taskmanagement-virid.vercel.app',
+    'https://*.vercel.app'
+  ],
   credentials: true
 }));
 app.use(express.json());
-// Serve uploads with authentication
-app.use('/uploads', (req, res, next) => {
-  const token = req.query.token;
-  if (!token) {
-    return res.status(401).json({ message: 'Authentication required' });
-  }
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret');
-    req.user = decoded;
-    next();
-  } catch (error) {
-    res.status(401).json({ message: 'Invalid token' });
-  }
-}, express.static('uploads'));
 
 // MongoDB Atlas Connection
 const mongoUri = process.env.MONGODB_URI || "mongodb+srv://pgoevenscheduler_db_user:taskmanager@cluster0t.wm3lhps.mongodb.net/taskmanager?retryWrites=true&w=majority&appName=Cluster0t";
