@@ -1,10 +1,12 @@
-// API Configuration - Updated for production deployment
+// API Configuration - Production Ready
+const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 const API_BASE_URL = (import.meta.env.VITE_API_URL || 
-  (window.location.hostname === 'localhost' ? 'http://localhost:5000' : 'https://taskmanager-backend-ux77.onrender.com')
+  (isLocalhost ? 'http://localhost:5000' : 'https://taskmanager-backend-ux77.onrender.com')
 ).replace(/\/$/, '');
 
 console.log('🚀 API Base URL:', API_BASE_URL);
 console.log('🌍 Environment:', window.location.hostname);
+console.log('🏠 Is Localhost:', isLocalhost);
 console.log('📡 Using backend:', API_BASE_URL.includes('render.com') ? 'Render' : 'Local');
 
 export const API_ENDPOINTS = {
