@@ -44,7 +44,7 @@ const mongoUri = process.env.MONGODB_URI || "mongodb+srv://pgoevenscheduler_db_u
 // Connect to MongoDB and wait for connection
 const connectDB = async () => {
   try {
-    await mongoose.connect(mongoUri, {
+    await mongoose.connect(cleanMongoUri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       serverSelectionTimeoutMS: 30000, // 30 seconds
