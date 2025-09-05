@@ -19,7 +19,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { User, Lock, Mail, UserCircle, Save } from 'lucide-react';
-import { API_ENDPOINTS } from '../../config/api';
+import { API_ENDPOINTS, default as API_BASE_URL } from '../../config/api';
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
@@ -96,9 +96,9 @@ const ProfilePage = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const url = `${API_ENDPOINTS.PROFILE}/change-password`;
+      const url = `${API_BASE_URL}/api/users/change-password`;
       console.log('🔐 Change password URL:', url);
-      console.log('🔐 API_ENDPOINTS.PROFILE:', API_ENDPOINTS.PROFILE);
+      console.log('🔐 API_BASE_URL:', API_BASE_URL);
       const response = await fetch(url, {
         method: 'PUT',
         headers: {
