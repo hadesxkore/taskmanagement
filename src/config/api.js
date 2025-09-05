@@ -4,6 +4,7 @@ const API_BASE_URL = (import.meta.env.VITE_API_URL ||
 ).replace(/\/$/, '');
 
 console.log('API Base URL:', API_BASE_URL);
+console.log('Environment:', window.location.hostname);
 
 export const API_ENDPOINTS = {
   // User endpoints
