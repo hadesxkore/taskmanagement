@@ -41,16 +41,47 @@ app.use(express.json());
 // MongoDB Atlas Connection
 const mongoUri = process.env.MONGODB_URI || "mongodb+srv://pgoevenscheduler_db_user:taskmanager@cluster0t.wm3lhps.mongodb.net/taskmanager";
 
-mongoose.connect(mongoUri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 30000, // 30 seconds
-  socketTimeoutMS: 45000, // 45 seconds
-  bufferMaxEntries: 0,
-  bufferCommands: false,
-})
-.then(() => console.log('Connected to MongoDB Atlas'))
-.catch((err) => console.error('MongoDB connection error:', err));
+// Connect to MongoDB and wait for connection
+const connectDB = async () => {
+  try {
+    await mongoose.connect(mongoUri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 30000, // 30 seconds
+      socketTimeoutMS: 45000, // 45 seconds
+      bufferCommands: true, // Allow buffering until connection is ready
+    });
+    console.log('Connected to MongoDB Atlas');
+  } catch (err) {
+    console.error('MongoDB connection error:', err);
+    process.exit(1);
+  }
+};
+
+// Start the server after MongoDB connection
+const startServer = async () => {
+  await connectDB();
+  
+  const PORT = process.env.PORT || 5000;
+  const server = app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log('Press Ctrl+C to stop the server');
+  });
+
+  server.on('error', (error) => {
+    if (error.code === 'EADDRINUSE') {
+      console.error(`Port ${PORT} is already in use. Trying port ${PORT + 1}`);
+      setTimeout(() => {
+        server.close();
+        server.listen(PORT + 1);
+      }, 1000);
+    } else {
+      console.error('Server error:', error);
+    }
+  });
+};
+
+startServer();
 
 // Import routes
 const userRoutes = require('./routes/userRoutes');
@@ -101,21 +132,3 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Internal server error', error: err.message });
 });
 
-// Start server
-const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-  console.log('Press Ctrl+C to stop the server');
-});
-
-server.on('error', (error) => {
-  if (error.code === 'EADDRINUSE') {
-    console.error(`Port ${PORT} is already in use. Trying port ${PORT + 1}`);
-    setTimeout(() => {
-      server.close();
-      server.listen(PORT + 1);
-    }, 1000);
-  } else {
-    console.error('Server error:', error);
-  }
-});
