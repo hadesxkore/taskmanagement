@@ -110,6 +110,15 @@ app.get('/cors-test', (req, res) => {
   });
 });
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ 
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    mongodb: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected'
+  });
+});
+
 // Handle preflight OPTIONS requests
 app.use((req, res, next) => {
   if (req.method === 'OPTIONS') {
