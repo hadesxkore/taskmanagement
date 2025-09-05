@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { cn } from "@/lib/utils";
@@ -47,6 +47,17 @@ const TaskCard = ({ task, onStatusChange, onDeleteTask, onFileClick, onEdit, onM
   const [newNote, setNewNote] = useState('');
   const [showNotesModal, setShowNotesModal] = useState(false);
   const [showAddNoteModal, setShowAddNoteModal] = useState(false);
+  const textareaRef = useRef(null);
+
+  // Ensure proper focus when modal opens
+  useEffect(() => {
+    if (showAddNoteModal && textareaRef.current) {
+      // Small delay to ensure modal is fully rendered
+      setTimeout(() => {
+        textareaRef.current?.focus();
+      }, 100);
+    }
+  }, [showAddNoteModal]);
 
   const {
     attributes,
@@ -408,21 +419,68 @@ const TaskCard = ({ task, onStatusChange, onDeleteTask, onFileClick, onEdit, onM
 
       {/* Add Note Modal */}
       <Dialog open={showAddNoteModal} onOpenChange={setShowAddNoteModal}>
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent 
+          className="sm:max-w-[500px]"
+          onKeyDown={(e) => {
+            // Prevent space key from bubbling up and triggering clicks
+            if (e.key === ' ') {
+              e.stopPropagation();
+            }
+          }}
+          onClick={(e) => {
+            // Prevent clicks from bubbling up
+            e.stopPropagation();
+          }}
+        >
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <MessageSquare className="h-5 w-5" />
               Add Note to "{task.title}"
             </DialogTitle>
           </DialogHeader>
-          <form onSubmit={handleAddNote} className="space-y-4">
+          <form 
+            onSubmit={handleAddNote} 
+            className="space-y-4"
+            onKeyDown={(e) => {
+              // Prevent space key from bubbling up
+              if (e.key === ' ') {
+                e.stopPropagation();
+              }
+            }}
+            onClick={(e) => {
+              // Prevent clicks from bubbling up
+              e.stopPropagation();
+            }}
+          >
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 Note Content
               </label>
               <Textarea
+                ref={textareaRef}
                 value={newNote}
                 onChange={(e) => setNewNote(e.target.value)}
+                onKeyDown={(e) => {
+                  // Prevent space key from bubbling up and allow normal text input
+                  if (e.key === ' ') {
+                    e.stopPropagation();
+                    // Allow the space to be added to the textarea normally
+                    return;
+                  }
+                  // Prevent other keys from bubbling up that might trigger unwanted actions
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.stopPropagation();
+                    // Don't prevent default for Enter, let it work normally in textarea
+                  }
+                }}
+                onClick={(e) => {
+                  // Prevent clicks from bubbling up
+                  e.stopPropagation();
+                }}
+                onFocus={(e) => {
+                  // Ensure focus stays in the textarea
+                  e.stopPropagation();
+                }}
                 placeholder="Write your note here..."
                 className="min-h-[120px] text-sm border-gray-200 dark:border-gray-700 focus:border-blue-500 dark:focus:border-blue-400 rounded-lg resize-none"
                 autoFocus
@@ -433,7 +491,8 @@ const TaskCard = ({ task, onStatusChange, onDeleteTask, onFileClick, onEdit, onM
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setShowAddNoteModal(false);
                   setNewNote('');
                 }}
@@ -445,6 +504,9 @@ const TaskCard = ({ task, onStatusChange, onDeleteTask, onFileClick, onEdit, onM
                 type="submit" 
                 className="px-4 bg-blue-600 hover:bg-blue-700 text-white"
                 disabled={!newNote.trim()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
               >
                 <Send className="h-4 w-4 mr-2" />
                 Add Note
