@@ -40,6 +40,11 @@ router.post('/register', async (req, res) => {
   }
 });
 
+// Test login endpoint
+router.get('/login-test', (req, res) => {
+  res.json({ message: 'Login endpoint is accessible', timestamp: new Date().toISOString() });
+});
+
 // Login user
 router.post('/login', async (req, res) => {
   try {
@@ -83,7 +88,12 @@ router.post('/login', async (req, res) => {
     });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ message: 'Error logging in', error: error.message });
+    console.error('Error stack:', error.stack);
+    res.status(500).json({ 
+      message: 'Error logging in', 
+      error: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 });
 
