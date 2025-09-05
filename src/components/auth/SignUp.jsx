@@ -68,7 +68,14 @@ const SignUp = () => {
     <AuthLayout>
       <div className="space-y-4">
         <div className="text-center">
-          <h1 className="text-2xl font-bold tracking-tight">Create an account</h1>
+          <div className="flex items-center justify-center mb-4">
+            <img 
+              src="/checklist.png" 
+              alt="Task Management" 
+              className="w-12 h-12 mr-3"
+            />
+            <h1 className="text-2xl font-bold tracking-tight">Task Management by Kobie</h1>
+          </div>
           <p className="text-sm text-muted-foreground mt-2">
             Enter your details below to create your account
           </p>

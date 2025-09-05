@@ -43,7 +43,17 @@ const Dashboard = () => {
         <div className="h-full flex flex-col">
           {/* Logo/Brand */}
           <div className="p-6 border-b border-border">
-            <h1 className="text-xl font-bold">Task Manager</h1>
+            <div className="flex items-center">
+              <img 
+                src="/checklist.png" 
+                alt="Task Management" 
+                className="w-8 h-8 mr-3"
+              />
+              <div>
+                <h1 className="text-xl font-bold">Task Management</h1>
+                <p className="text-xs text-muted-foreground">by Kobie</p>
+              </div>
+            </div>
           </div>
 
           {/* Navigation Links */}
