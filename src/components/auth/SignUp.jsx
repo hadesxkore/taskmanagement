@@ -5,6 +5,7 @@ import { Label } from '../ui/label';
 import AuthLayout from './AuthLayout';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { API_ENDPOINTS } from '../../config/api';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ const SignUp = () => {
 
     setLoading(true);
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users/register`, {
+      const response = await fetch(API_ENDPOINTS.REGISTER, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

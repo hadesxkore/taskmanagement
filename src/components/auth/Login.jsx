@@ -5,6 +5,7 @@ import { Label } from '../ui/label';
 import AuthLayout from './AuthLayout';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { API_ENDPOINTS } from '../../config/api';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users/login`, {
+      const response = await fetch(API_ENDPOINTS.LOGIN, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

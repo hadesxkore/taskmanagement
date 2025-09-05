@@ -18,9 +18,11 @@ app.use(cors({
     'http://localhost:5175', 
     'http://localhost:5176',
     'https://taskmanagement-virid.vercel.app',
-    'https://*.vercel.app'
+    /^https:\/\/.*\.vercel\.app$/
   ],
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
 }));
 app.use(express.json());
 
