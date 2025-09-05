@@ -19,6 +19,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { User, Lock, Mail, UserCircle, Save } from 'lucide-react';
+import { API_ENDPOINTS } from '../../config/api';
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
@@ -58,7 +59,7 @@ const ProfilePage = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/users/profile', {
+      const response = await fetch(API_ENDPOINTS.PROFILE, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -94,7 +95,7 @@ const ProfilePage = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/users/change-password', {
+      const response = await fetch(`${API_ENDPOINTS.PROFILE}/change-password`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
