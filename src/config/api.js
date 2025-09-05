@@ -1,10 +1,11 @@
-// API Configuration
+// API Configuration - Updated for production deployment
 const API_BASE_URL = (import.meta.env.VITE_API_URL || 
   (window.location.hostname === 'localhost' ? 'http://localhost:5000' : 'https://taskmanager-backend-ux77.onrender.com')
 ).replace(/\/$/, '');
 
-console.log('API Base URL:', API_BASE_URL);
-console.log('Environment:', window.location.hostname);
+console.log('🚀 API Base URL:', API_BASE_URL);
+console.log('🌍 Environment:', window.location.hostname);
+console.log('📡 Using backend:', API_BASE_URL.includes('render.com') ? 'Render' : 'Local');
 
 export const API_ENDPOINTS = {
   // User endpoints
