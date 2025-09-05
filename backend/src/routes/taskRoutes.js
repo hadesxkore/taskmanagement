@@ -275,6 +275,12 @@ router.post('/:taskId/notes', auth, async (req, res) => {
 // Delete note from task
 router.delete('/:taskId/notes/:noteId', auth, async (req, res) => {
   try {
+    console.log('Delete note request:', {
+      taskId: req.params.taskId,
+      noteId: req.params.noteId,
+      userId: req.user._id
+    });
+
     const task = await Task.findOne({
       _id: req.params.taskId,
       $or: [
@@ -292,12 +298,16 @@ router.delete('/:taskId/notes/:noteId', auth, async (req, res) => {
       ]
     });
 
+    console.log('Found task:', task ? 'Yes' : 'No');
+
     if (!task) {
       return res.status(404).json({ message: 'Task not found or unauthorized' });
     }
 
     // Find the note and check if user can delete it (author or leader)
     const note = task.notes.id(req.params.noteId);
+    console.log('Found note:', note ? 'Yes' : 'No');
+    
     if (!note) {
       return res.status(404).json({ message: 'Note not found' });
     }
@@ -306,12 +316,17 @@ router.delete('/:taskId/notes/:noteId', auth, async (req, res) => {
     const canDelete = note.author.toString() === req.user._id.toString() || 
                      (task.isGroupTask && task.leader && task.leader.toString() === req.user._id.toString());
     
+    console.log('Can delete:', canDelete);
+    
     if (!canDelete) {
       return res.status(403).json({ message: 'Unauthorized to delete this note' });
     }
 
-    note.remove();
+    // Use pull to remove the note from the array
+    task.notes.pull(req.params.noteId);
     await task.save();
+
+    console.log('Note deleted successfully');
 
     // Populate info before sending response
     await task.populate('notes.author', 'username');
