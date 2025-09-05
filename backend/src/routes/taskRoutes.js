@@ -229,16 +229,23 @@ router.post('/:taskId/notes', auth, async (req, res) => {
     const { content } = req.body;
     const task = await Task.findOne({
       _id: req.params.taskId,
-      isGroupTask: true,
       $or: [
-        { user: req.user._id },
-        { members: req.user._id },
-        { leader: req.user._id }
+        // Personal task - user owns it
+        { user: req.user._id, isGroupTask: false },
+        // Group task - user is leader, member, or owner
+        { 
+          isGroupTask: true,
+          $or: [
+            { user: req.user._id },
+            { members: req.user._id },
+            { leader: req.user._id }
+          ]
+        }
       ]
     });
 
     if (!task) {
-      return res.status(404).json({ message: 'Group task not found or unauthorized' });
+      return res.status(404).json({ message: 'Task not found or unauthorized' });
     }
 
     // Add the note
@@ -251,8 +258,12 @@ router.post('/:taskId/notes', auth, async (req, res) => {
 
     // Populate the author info for the new note
     await task.populate('notes.author', 'username');
-    await task.populate('members', 'username email');
-    await task.populate('leader', 'username email');
+    
+    // Only populate group-specific fields if it's a group task
+    if (task.isGroupTask) {
+      await task.populate('members', 'username email');
+      await task.populate('leader', 'username email');
+    }
 
     res.json(task);
   } catch (error) {
@@ -261,21 +272,28 @@ router.post('/:taskId/notes', auth, async (req, res) => {
   }
 });
 
-// Delete note from group task
+// Delete note from task
 router.delete('/:taskId/notes/:noteId', auth, async (req, res) => {
   try {
     const task = await Task.findOne({
       _id: req.params.taskId,
-      isGroupTask: true,
       $or: [
-        { user: req.user._id },
-        { members: req.user._id },
-        { leader: req.user._id }
+        // Personal task - user owns it
+        { user: req.user._id, isGroupTask: false },
+        // Group task - user is leader, member, or owner
+        { 
+          isGroupTask: true,
+          $or: [
+            { user: req.user._id },
+            { members: req.user._id },
+            { leader: req.user._id }
+          ]
+        }
       ]
     });
 
     if (!task) {
-      return res.status(404).json({ message: 'Group task not found or unauthorized' });
+      return res.status(404).json({ message: 'Task not found or unauthorized' });
     }
 
     // Find the note and check if user can delete it (author or leader)
@@ -284,8 +302,11 @@ router.delete('/:taskId/notes/:noteId', auth, async (req, res) => {
       return res.status(404).json({ message: 'Note not found' });
     }
 
-    // Only the author or leader can delete the note
-    if (note.author.toString() !== req.user._id.toString() && task.leader.toString() !== req.user._id.toString()) {
+    // Only the author or leader (for group tasks) can delete the note
+    const canDelete = note.author.toString() === req.user._id.toString() || 
+                     (task.isGroupTask && task.leader && task.leader.toString() === req.user._id.toString());
+    
+    if (!canDelete) {
       return res.status(403).json({ message: 'Unauthorized to delete this note' });
     }
 
@@ -294,8 +315,12 @@ router.delete('/:taskId/notes/:noteId', auth, async (req, res) => {
 
     // Populate info before sending response
     await task.populate('notes.author', 'username');
-    await task.populate('members', 'username email');
-    await task.populate('leader', 'username email');
+    
+    // Only populate group-specific fields if it's a group task
+    if (task.isGroupTask) {
+      await task.populate('members', 'username email');
+      await task.populate('leader', 'username email');
+    }
 
     res.json(task);
   } catch (error) {
