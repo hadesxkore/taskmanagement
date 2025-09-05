@@ -8,6 +8,7 @@ export const API_ENDPOINTS = {
   LOGIN: `${API_BASE_URL}/api/users/login`,
   REGISTER: `${API_BASE_URL}/api/users/register`,
   PROFILE: `${API_BASE_URL}/api/users/profile`,
+  USERS: `${API_BASE_URL}/api/users`,
   
   // Task endpoints
   TASKS: `${API_BASE_URL}/api/tasks`,

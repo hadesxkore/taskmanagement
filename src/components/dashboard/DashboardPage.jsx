@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
+import { API_ENDPOINTS } from '../../config/api';
 import {
   ArrowUpRight,
   ArrowDownRight,
@@ -73,7 +74,7 @@ const DashboardPage = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/tasks/dashboard/stats', {
+      const response = await fetch(API_ENDPOINTS.DASHBOARD_STATS, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'

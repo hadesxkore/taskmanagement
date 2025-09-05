@@ -35,6 +35,7 @@ import { PlusCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import TaskCard from './TaskCard';
 import FilePreview from './FilePreview';
+import { API_ENDPOINTS } from '../../config/api';
 import GroupTasksPage from './GroupTasksPage';
 
 const TasksPage = () => {
@@ -71,7 +72,7 @@ const TasksPage = () => {
   const fetchTasks = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/tasks', {
+      const response = await fetch(API_ENDPOINTS.TASKS, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -107,7 +108,7 @@ const TasksPage = () => {
         formData.append('attachments', file);
       });
 
-      const response = await fetch('http://localhost:5000/api/tasks', {
+      const response = await fetch(API_ENDPOINTS.TASKS, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -242,7 +243,7 @@ const TasksPage = () => {
         setTasks(items => arrayMove(items, oldIndex, newIndex));
 
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/tasks/reorder', {
+        const response = await fetch(API_ENDPOINTS.REORDER, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

@@ -49,6 +49,7 @@ import {
   rectSortingStrategy,
 } from '@dnd-kit/sortable';
 import TaskCard from './TaskCard';
+import { API_ENDPOINTS } from '../../config/api';
 
 const GroupTasksPage = () => {
   const [tasks, setTasks] = useState([]);
@@ -93,7 +94,7 @@ const GroupTasksPage = () => {
   const fetchGroupTasks = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/tasks/group', {
+      const response = await fetch(API_ENDPOINTS.GROUP_TASKS, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -112,7 +113,7 @@ const GroupTasksPage = () => {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/users', {
+      const response = await fetch(API_ENDPOINTS.USERS, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -366,7 +367,7 @@ const GroupTasksPage = () => {
         formData.append('attachments', file);
       });
 
-      const response = await fetch('http://localhost:5000/api/tasks/group', {
+      const response = await fetch(API_ENDPOINTS.GROUP_TASKS, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
