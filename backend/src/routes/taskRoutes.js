@@ -326,7 +326,7 @@ router.delete('/:taskId/notes/:noteId', auth, async (req, res) => {
     task.notes.pull(req.params.noteId);
     await task.save();
 
-    console.log('Note deleted successfully');
+    console.log('Note deleted successfully - v1.1');
 
     // Populate info before sending response
     await task.populate('notes.author', 'username');
