@@ -8,6 +8,7 @@ console.log('🚀 API Base URL:', API_BASE_URL);
 console.log('🌍 Environment:', window.location.hostname);
 console.log('🏠 Is Localhost:', isLocalhost);
 console.log('📡 Using backend:', API_BASE_URL.includes('render.com') ? 'Render' : 'Local');
+console.log('🔧 Notes fix deployed - both personal and group tasks supported');
 
 export const API_ENDPOINTS = {
   // User endpoints
