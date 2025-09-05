@@ -59,6 +59,7 @@ const ProfilePage = () => {
 
     try {
       const token = localStorage.getItem('token');
+      console.log('👤 Profile update URL:', API_ENDPOINTS.PROFILE);
       const response = await fetch(API_ENDPOINTS.PROFILE, {
         method: 'PUT',
         headers: {
@@ -95,7 +96,10 @@ const ProfilePage = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${API_ENDPOINTS.PROFILE}/change-password`, {
+      const url = `${API_ENDPOINTS.PROFILE}/change-password`;
+      console.log('🔐 Change password URL:', url);
+      console.log('🔐 API_ENDPOINTS.PROFILE:', API_ENDPOINTS.PROFILE);
+      const response = await fetch(url, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
