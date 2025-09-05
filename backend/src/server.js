@@ -11,15 +11,27 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: [
-    'http://localhost:5177', 
-    'http://localhost:5173', 
-    'http://localhost:5174', 
-    'http://localhost:5175', 
-    'http://localhost:5176',
-    'https://taskmanagement-virid.vercel.app',
-    /^https:\/\/.*\.vercel\.app$/
-  ],
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      'http://localhost:5177', 
+      'http://localhost:5173', 
+      'http://localhost:5174', 
+      'http://localhost:5175', 
+      'http://localhost:5176',
+      'https://taskmanagement-virid.vercel.app'
+    ];
+    
+    // Check if origin is allowed
+    if (allowedOrigins.includes(origin) || origin.includes('.vercel.app')) {
+      return callback(null, true);
+    }
+    
+    console.log('CORS blocked origin:', origin);
+    return callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
@@ -46,7 +58,20 @@ app.use('/api/tasks', taskRoutes);
 
 // Welcome route
 app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to TaskManager API' });
+  res.json({ 
+    message: 'Welcome to TaskManager API',
+    cors: 'CORS is configured',
+    origin: req.headers.origin || 'No origin header'
+  });
+});
+
+// CORS test endpoint
+app.get('/cors-test', (req, res) => {
+  res.json({ 
+    message: 'CORS test successful',
+    origin: req.headers.origin,
+    timestamp: new Date().toISOString()
+  });
 });
 
 // Serve test.html
