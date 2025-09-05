@@ -1,5 +1,7 @@
 // API Configuration
-const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+const API_BASE_URL = (import.meta.env.VITE_API_URL || 
+  (window.location.hostname === 'localhost' ? 'http://localhost:5000' : 'https://taskmanager-backend-ux77.onrender.com')
+).replace(/\/$/, '');
 
 export const API_ENDPOINTS = {
   // User endpoints
