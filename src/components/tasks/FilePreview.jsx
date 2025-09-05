@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { FileText, Download } from 'lucide-react';
 import { toast } from 'sonner';
+import { default as API_BASE_URL } from '../../config/api';
 
 const FilePreview = ({ file, taskId, onClose }) => {
   const [loading, setLoading] = useState(true);
@@ -12,7 +13,7 @@ const FilePreview = ({ file, taskId, onClose }) => {
     const fetchFile = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:5000/api/tasks/${taskId}/attachments/${file.filename}`, {
+        const response = await fetch(`${API_BASE_URL}/api/tasks/${taskId}/attachments/${file.filename}`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

@@ -140,7 +140,7 @@ const TasksPage = () => {
   const handleStatusChange = async (taskId, newStatus) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+      const response = await fetch(`${API_ENDPOINTS.TASKS}/${taskId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -166,7 +166,7 @@ const TasksPage = () => {
   const handleDeleteTask = async (taskId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+      const response = await fetch(`${API_ENDPOINTS.TASKS}/${taskId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -191,7 +191,7 @@ const TasksPage = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/tasks/${editingTask._id}`, {
+      const response = await fetch(`${API_ENDPOINTS.TASKS}/${editingTask._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

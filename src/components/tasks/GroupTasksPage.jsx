@@ -130,7 +130,7 @@ const GroupTasksPage = () => {
   const handleStatusChange = async (taskId, newStatus) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+      const response = await fetch(`${API_ENDPOINTS.TASKS}/${taskId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -155,7 +155,7 @@ const GroupTasksPage = () => {
   const handleDeleteTask = async (taskId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+      const response = await fetch(`${API_ENDPOINTS.TASKS}/${taskId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -184,7 +184,7 @@ const GroupTasksPage = () => {
   const handleUpdateMembers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/tasks/${managingTask._id}/members`, {
+      const response = await fetch(`${API_ENDPOINTS.TASKS}/${managingTask._id}/members`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -217,7 +217,7 @@ const GroupTasksPage = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/tasks/${editingTask._id}`, {
+      const response = await fetch(`${API_ENDPOINTS.TASKS}/${editingTask._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -250,7 +250,7 @@ const GroupTasksPage = () => {
   const handleAddNote = async (taskId, content) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/tasks/${taskId}/notes`, {
+      const response = await fetch(`${API_ENDPOINTS.TASKS}/${taskId}/notes`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -275,7 +275,7 @@ const GroupTasksPage = () => {
   const handleDeleteNote = async (taskId, noteId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/tasks/${taskId}/notes/${noteId}`, {
+      const response = await fetch(`${API_ENDPOINTS.TASKS}/${taskId}/notes/${noteId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -315,7 +315,7 @@ const GroupTasksPage = () => {
         setTasks(items => arrayMove(items, oldIndex, newIndex));
 
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/tasks/reorder', {
+        const response = await fetch(API_ENDPOINTS.REORDER, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
